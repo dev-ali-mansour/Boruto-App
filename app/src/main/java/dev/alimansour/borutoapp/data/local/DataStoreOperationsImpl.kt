@@ -1,4 +1,4 @@
-package dev.alimansour.borutoapp.data.pref
+package dev.alimansour.borutoapp.data.local
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
-import dev.alimansour.borutoapp.domain.repository.DataStoreOperations
+import dev.alimansour.borutoapp.domain.local.DataStoreOperations
 import dev.alimansour.borutoapp.util.Constants.PREFERENCES_KEY
 import dev.alimansour.borutoapp.util.Constants.PREFERENCES_NAME
 import kotlinx.coroutines.flow.Flow
