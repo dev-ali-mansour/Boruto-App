@@ -13,7 +13,7 @@ interface HeroDao {
     @Query("SELECT * FROM hero_table ORDER BY id ASC")
     fun getAll(): PagingSource<Int, HeroEntity>
 
-    @Query("SELECT * FROM hero_table ORDER BY id ASC")
+    @Query("SELECT * FROM hero_table WHERE id = :heroId")
     fun getSelectedHero(heroId: Int): HeroEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

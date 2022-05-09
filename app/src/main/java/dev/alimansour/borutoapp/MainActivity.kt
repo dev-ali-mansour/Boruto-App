@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.borutoapp.navigation.SetupNavGraph
-import dev.alimansour.borutoapp.ui.theme.BorutoAppTheme
+import dev.alimansour.borutoapp.presentation.theme.BorutoAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

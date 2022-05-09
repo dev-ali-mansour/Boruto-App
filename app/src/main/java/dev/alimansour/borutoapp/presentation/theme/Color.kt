@@ -1,4 +1,4 @@
-package dev.alimansour.borutoapp.ui.theme
+package dev.alimansour.borutoapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
