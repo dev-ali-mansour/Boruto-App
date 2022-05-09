@@ -2,6 +2,7 @@ package dev.alimansour.borutoapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context) =
+    fun provideDatabase(@ApplicationContext context: Context): BorutoDatabase =
         Room.databaseBuilder(
             context,
             BorutoDatabase::class.java,
