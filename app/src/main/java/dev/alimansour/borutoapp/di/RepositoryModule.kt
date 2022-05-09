@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.alimansour.borutoapp.data.local.DataStoreOperationsImpl
 import dev.alimansour.borutoapp.data.repository.RepositoryImpl
 import dev.alimansour.borutoapp.domain.local.DataStoreOperations
+import dev.alimansour.borutoapp.domain.repository.Repository
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -22,7 +23,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRepository(datastore: DataStoreOperations): RepositoryImpl =
+    fun provideRepository(datastore: DataStoreOperations): Repository =
         RepositoryImpl(datastore = datastore)
 
 }

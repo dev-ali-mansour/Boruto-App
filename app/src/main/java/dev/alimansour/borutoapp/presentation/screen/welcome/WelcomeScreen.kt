@@ -18,17 +18,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.*
 import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.OnBoardingPage
+import dev.alimansour.borutoapp.navigation.Screen
 import dev.alimansour.borutoapp.presentation.theme.*
 import dev.alimansour.borutoapp.util.Constants
 import dev.alimansour.borutoapp.util.Constants.LAST_ON_BOARDING_PAGE
 
 @ExperimentalPagerApi
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    welcomeViewModel: WelcomeViewModel = hiltViewModel()
+) {
     val pages = listOf(
         OnBoardingPage.First,
         OnBoardingPage.Second,
@@ -64,7 +69,9 @@ fun WelcomeScreen(navController: NavHostController) {
             modifier = Modifier.weight(1f),
             pagerState = pagerState
         ) {
-
+            welcomeViewModel.saveOnBoardingState(completed = true)
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
         }
     }
 }
@@ -119,13 +126,13 @@ fun FinishButton(
         horizontalArrangement = Arrangement.Center
     ) {
         AnimatedVisibility(
-            modifier = Modifier.fillMaxWidth( ),
+            modifier = Modifier.fillMaxWidth(),
             visible = pagerState.currentPage == LAST_ON_BOARDING_PAGE
         ) {
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
-backgroundColor = MaterialTheme.colors.buttonBackgroundColor,
+                    backgroundColor = MaterialTheme.colors.buttonBackgroundColor,
                     contentColor = Color.White
                 )
             ) {

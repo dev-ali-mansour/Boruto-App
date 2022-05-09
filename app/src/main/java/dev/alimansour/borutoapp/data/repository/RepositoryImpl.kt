@@ -5,7 +5,7 @@ import dev.alimansour.borutoapp.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(
+class RepositoryImpl(
     private val datastore: DataStoreOperations
 ) : Repository {
 
