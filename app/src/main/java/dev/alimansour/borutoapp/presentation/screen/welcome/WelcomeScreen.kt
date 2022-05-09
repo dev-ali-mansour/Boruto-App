@@ -24,6 +24,7 @@ import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.OnBoardingPage
 import dev.alimansour.borutoapp.presentation.theme.*
 import dev.alimansour.borutoapp.util.Constants
+import dev.alimansour.borutoapp.util.Constants.LAST_ON_BOARDING_PAGE
 
 @ExperimentalPagerApi
 @Composable
@@ -119,7 +120,7 @@ fun FinishButton(
     ) {
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth( ),
-            visible = pagerState.currentPage == 2
+            visible = pagerState.currentPage == LAST_ON_BOARDING_PAGE
         ) {
             Button(
                 onClick = onClick,
