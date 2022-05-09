@@ -11,4 +11,6 @@ object Constants {
 
     const val PREFERENCES_NAME = "boruto_preferences"
     const val PREFERENCES_KEY = "on_boarding_completed"
+
+    const val BASE_URL = "https://boruto-ktor-server.herokuapp.com/"
 }
