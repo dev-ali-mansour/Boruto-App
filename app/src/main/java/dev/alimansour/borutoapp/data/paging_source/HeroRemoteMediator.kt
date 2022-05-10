@@ -9,10 +9,9 @@ import dev.alimansour.borutoapp.data.local.BorutoDatabase
 import dev.alimansour.borutoapp.data.local.entity.HeroEntity
 import dev.alimansour.borutoapp.data.local.entity.HeroRemoteKeys
 import dev.alimansour.borutoapp.data.remote.BorutoApi
-import javax.inject.Inject
 
-@OptIn(ExperimentalPagingApi::class)
-class HeroRemoteMediator @Inject constructor(
+@ExperimentalPagingApi
+class HeroRemoteMediator(
     private val borutoApi: BorutoApi,
     private val borutoDatabase: BorutoDatabase
 ) : RemoteMediator<Int, HeroEntity>() {
@@ -43,7 +42,7 @@ class HeroRemoteMediator @Inject constructor(
                 nextPage
             }
         }
-        val response = borutoApi.getAllHeroes()
+        val response = borutoApi.getAllHeroes(page = page)
         if (response.heroes.isNotEmpty()) {
             borutoDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {

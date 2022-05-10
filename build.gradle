@@ -9,6 +9,7 @@ buildscript {
         accompanist_version = '0.21.2-beta'
         room_version = '2.4.2'
         retrofit_version = '2.9.0'
+        logging_interceptor_version = '4.2.1'
         ktx_ser_converter_version = '0.8.0'
         paging_version = '1.0.0-alpha14'
         data_store_version = '1.0.0'

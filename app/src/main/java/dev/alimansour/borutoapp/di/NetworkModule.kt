@@ -13,11 +13,13 @@ import dev.alimansour.borutoapp.domain.remote.RemoteDataSource
 import dev.alimansour.borutoapp.util.Constants.BASE_URL
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
 
 @ExperimentalPagingApi
 @ExperimentalSerializationApi
@@ -27,11 +29,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient =
-        OkHttpClient.Builder()
+    fun provideHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        return OkHttpClient.Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(interceptor = interceptor)
             .build()
+    }
 
     @Singleton
     @Provides
@@ -39,7 +46,7 @@ object NetworkModule {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
 
     @Singleton

@@ -70,6 +70,7 @@ dependencies {
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$ktx_ser_converter_version"
 
     // Paging 3.0
