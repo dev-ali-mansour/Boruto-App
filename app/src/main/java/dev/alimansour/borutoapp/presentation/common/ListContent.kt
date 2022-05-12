@@ -1,5 +1,6 @@
 package dev.alimansour.borutoapp.presentation.common
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,8 +17,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import dev.alimansour.borutoapp.R
@@ -46,11 +50,14 @@ fun HeroItem(
         error = painterResource(id = R.drawable.ic_placeholder)
     )
 
-    Box(modifier = Modifier
-        .height(HERO_ITEM_HEIGHT)
-        .clickable {
-            navController.navigate(Screen.Details.passHero(heroId = hero.id))
-        }) {
+    Box(
+        modifier = Modifier
+            .height(HERO_ITEM_HEIGHT)
+            .clickable {
+                navController.navigate(Screen.Details.passHero(heroId = hero.id))
+            },
+        contentAlignment = Alignment.BottomStart
+    ) {
         Surface(shape = Shapes.large) {
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -97,8 +104,55 @@ fun HeroItem(
                         modifier = Modifier.padding(end = SMALL_PADDING),
                         rating = hero.rating
                     )
+                    Text(
+                        text = "${hero.rating}",
+                        textAlign = TextAlign.Center,
+                        color = Color.White.copy(alpha = ContentAlpha.medium)
+                    )
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun HeroItemPreview() {
+    HeroItem(
+        hero = Hero(
+            id = 1,
+            name = "Sauske",
+            image = "",
+            about = "Some random text...",
+            rating = 4.5,
+            power = 100,
+            month = "",
+            day = "",
+            family = listOf(),
+            abilities = listOf(),
+            natureTypes = listOf()
+        ),
+        navController = rememberNavController()
+    )
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun HeroItemDarkPreview() {
+    HeroItem(
+        hero = Hero(
+            id = 1,
+            name = "Sauske",
+            image = "",
+            about = "Some random text...",
+            rating = 4.5,
+            power = 100,
+            month = "",
+            day = "",
+            family = listOf(),
+            abilities = listOf(),
+            natureTypes = listOf()
+        ),
+        navController = rememberNavController()
+    )
 }
