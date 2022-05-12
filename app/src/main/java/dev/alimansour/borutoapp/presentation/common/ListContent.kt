@@ -97,7 +97,7 @@ fun HeroItem(
             ) {
                 Text(
                     text = hero.name,
-                    color = MaterialTheme.colors.topAppBarContentColor,
+                    color = topAppBarContentColor,
                     fontSize = MaterialTheme.typography.h5.fontSize,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,

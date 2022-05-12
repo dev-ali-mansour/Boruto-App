@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.alimansour.borutoapp.R
-import dev.alimansour.borutoapp.presentation.theme.topAppBarBackgroundColor
-import dev.alimansour.borutoapp.presentation.theme.topAppBarContentColor
+import dev.alimansour.borutoapp.presentation.theme.*
 
 @Composable
 fun HomeTopBar(onSearchClicked: () -> Unit) {
@@ -17,15 +16,16 @@ fun HomeTopBar(onSearchClicked: () -> Unit) {
         title = {
             Text(
                 text = "Explore",
-                color = MaterialTheme.colors.topAppBarContentColor
+                color = topAppBarContentColor
             )
         },
-        backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
+        backgroundColor = topAppBarBackgroundColor,
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(R.string.search_icon)
+                    contentDescription = stringResource(R.string.search_icon),
+                    tint = topAppBarContentColor
                 )
             }
         })
@@ -34,5 +34,11 @@ fun HomeTopBar(onSearchClicked: () -> Unit) {
 @Preview
 @Composable
 fun HomeTopBarPreview() {
+    HomeTopBar {}
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun HomeTopBarDarkPreview() {
     HomeTopBar {}
 }

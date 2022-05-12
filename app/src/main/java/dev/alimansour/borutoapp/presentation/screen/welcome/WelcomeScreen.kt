@@ -45,7 +45,7 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.welcomeScreenBackgroundColor)
+            .background(welcomeScreenBackgroundColor)
     ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
@@ -60,8 +60,8 @@ fun WelcomeScreen(
                 .weight(1f)
                 .align(CenterHorizontally),
             pagerState = pagerState,
-            activeColor = MaterialTheme.colors.activeIndicatorColor,
-            inactiveColor = MaterialTheme.colors.inactiveIndicatorColor,
+            activeColor = activeIndicatorColor,
+            inactiveColor = inactiveIndicatorColor,
             indicatorWidth = PAGING_INDICATOR_WIDTH,
             spacing = PAGING_INDICATOR_SPACING
         )
@@ -94,7 +94,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
             modifier = Modifier
                 .fillMaxWidth(),
             text = onBoardingPage.title,
-            color = MaterialTheme.colors.titleColor,
+            color = titleColor,
             fontSize = MaterialTheme.typography.h4.fontSize,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -105,7 +105,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
                 .padding(horizontal = EXTRA_LARGE_PADDING)
                 .padding(top = SMALL_PADDING),
             text = onBoardingPage.description,
-            color = MaterialTheme.colors.descriptionColor,
+            color = descriptionColor,
             fontSize = MaterialTheme.typography.subtitle1.fontSize,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center
@@ -132,7 +132,7 @@ fun FinishButton(
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.buttonBackgroundColor,
+                    backgroundColor = buttonBackgroundColor,
                     contentColor = Color.White
                 )
             ) {
