@@ -18,6 +18,17 @@ class HeroRemoteMediator(
     private val heroDao = borutoDatabase.heroDao()
     private val heroRemoteKeysDao = borutoDatabase.heroRemoteKeysDao()
 
+    override suspend fun initialize(): InitializeAction {
+        val currentTime = System.currentTimeMillis()
+        val lastUpdated = heroRemoteKeysDao.getRemoteKeys(heroId = 1)?.lastUpdated ?: 0L
+        val cacheTimeout = 1440
+        val difInMinutes = (currentTime - lastUpdated) / 1000 / 60
+        return when {
+            difInMinutes.toInt() <= cacheTimeout -> InitializeAction.SKIP_INITIAL_REFRESH
+            else -> InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+    }
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, HeroEntity>
@@ -53,7 +64,8 @@ class HeroRemoteMediator(
                     HeroRemoteKeys(
                         id = heroEntity.id,
                         prevPage = response.prevPage,
-                        nextPage = response.nextPage
+                        nextPage = response.nextPage,
+                        lastUpdated = response.lastUpdated
                     )
                 }
                 heroRemoteKeysDao.addAllRemoteKeys(heroRemoteKeys = keys)
@@ -88,4 +100,10 @@ class HeroRemoteMediator(
             heroRemoteKeysDao.getRemoteKeys(heroId = id)
         }
     }
+
+    /*private fun parseMillis(millis: Long): String {
+        val date = Date(millis)
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.ROOT)
+        return format.format(date)
+    }*/
 }
