@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.rememberAsyncImagePainter
 import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.Hero
@@ -36,7 +38,19 @@ fun ListContent(
     heroes: LazyPagingItems<Hero>,
     navController: NavHostController
 ) {
-
+    LazyColumn(
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
+    ) {
+        items(
+            items = heroes,
+            key = { hero -> hero.id }
+        ) { hero ->
+            hero?.let {
+                HeroItem(hero = it, navController = navController)
+            }
+        }
+    }
 }
 
 @Composable
