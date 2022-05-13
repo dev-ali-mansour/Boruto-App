@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
+import dev.alimansour.borutoapp.presentation.screen.details.DetailsScreen
 import dev.alimansour.borutoapp.presentation.screen.home.HomeScreen
 import dev.alimansour.borutoapp.presentation.screen.search.SearchScreen
 import dev.alimansour.borutoapp.presentation.screen.splash.SplashScreen
@@ -35,7 +36,7 @@ fun SetupNavGraph(navController: NavHostController) {
                 type = NavType.IntType
             })
         ) {
-
+            DetailsScreen(navController = navController)
         }
         composable(route = Screen.Search.route) {
             SearchScreen(navController = navController)

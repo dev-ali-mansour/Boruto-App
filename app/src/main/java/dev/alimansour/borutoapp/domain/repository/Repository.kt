@@ -12,4 +12,5 @@ interface Repository {
     fun getOnBoardingState(): Flow<Boolean>
     fun getAllHeroes(): Flow<PagingData<Hero>>
     fun searchHeroes(query: String): Flow<PagingData<Hero>>
+    suspend fun getSelectedHero(heroId: Int): Hero
 }

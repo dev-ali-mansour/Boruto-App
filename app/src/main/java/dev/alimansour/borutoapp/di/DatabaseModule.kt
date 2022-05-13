@@ -2,13 +2,13 @@ package dev.alimansour.borutoapp.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.alimansour.borutoapp.data.local.BorutoDatabase
+import dev.alimansour.borutoapp.data.local.LocalDataSourceImpl
 import dev.alimansour.borutoapp.util.Constants.BORUTO_DATABASE
 import javax.inject.Singleton
 
@@ -25,5 +25,8 @@ object DatabaseModule {
             BORUTO_DATABASE
         ).build()
 
-
+    @Singleton
+    @Provides
+    fun provideLocalDataSource(borutoDatabase: BorutoDatabase): LocalDataSourceImpl =
+        LocalDataSourceImpl(borutoDatabase = borutoDatabase)
 }

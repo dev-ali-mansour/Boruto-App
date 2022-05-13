@@ -1,17 +1,16 @@
 package dev.alimansour.borutoapp.data.repository
 
 import androidx.paging.PagingData
-import androidx.paging.map
-import dev.alimansour.borutoapp.data.local.entity.toModel
 import dev.alimansour.borutoapp.domain.local.DataStoreOperations
+import dev.alimansour.borutoapp.domain.local.LocalDataSource
 import dev.alimansour.borutoapp.domain.model.Hero
 import dev.alimansour.borutoapp.domain.remote.RemoteDataSource
 import dev.alimansour.borutoapp.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class RepositoryImpl(
-    private val remoteDataSource: RemoteDataSource,
+    private val local: LocalDataSource,
+    private val remote: RemoteDataSource,
     private val datastore: DataStoreOperations
 ) : Repository {
 
@@ -23,16 +22,11 @@ class RepositoryImpl(
         datastore.getOnBoardingState()
 
     override fun getAllHeroes(): Flow<PagingData<Hero>> =
-        remoteDataSource.getAllHeroes().map { pagingData ->
-            pagingData.map { entity ->
-                entity.toModel()
-            }
-        }
+        remote.getAllHeroes()
 
     override fun searchHeroes(query: String): Flow<PagingData<Hero>> =
-        remoteDataSource.searchHeroes(name = query).map { pagingData ->
-            pagingData.map { entity ->
-                entity.toModel()
-            }
-        }
+        remote.searchHeroes(name = query)
+
+    override suspend fun getSelectedHero(heroId: Int): Hero =
+        local.getSelectedHero(heroId = heroId)
 }
