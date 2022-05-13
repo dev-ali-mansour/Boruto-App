@@ -6,6 +6,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -20,13 +22,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.alimansour.borutoapp.R
+import dev.alimansour.borutoapp.domain.model.Hero
 import dev.alimansour.borutoapp.presentation.theme.*
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @Composable
-fun EmptyScreen(error: LoadState.Error? = null) {
+fun EmptyScreen(
+    heroes: LazyPagingItems<Hero>? = null,
+    error: LoadState.Error? = null
+) {
     var message by remember { mutableStateOf("Find Your Favorite Hero!") }
     var icon by remember { mutableStateOf(R.drawable.ic_search_document) }
     error?.let {
@@ -44,46 +54,67 @@ fun EmptyScreen(error: LoadState.Error? = null) {
         startAnimation = true
     }
 
-    EmptyContent(alphaAnim = alphaAnim, icon = icon, message = message)
+    EmptyContent(
+        alphaAnim = alphaAnim,
+        icon = icon,
+        message = message,
+        heroes = heroes,
+        error = error
+    )
 }
 
 @Composable
 fun EmptyContent(
     alphaAnim: Float,
     @DrawableRes icon: Int,
-    message: String
+    message: String,
+    heroes: LazyPagingItems<Hero>? = null,
+    error: LoadState.Error? = null
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = screenBackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    SwipeRefresh(
+        swipeEnabled = error != null,
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        onRefresh = {
+            isRefreshing = true
+            heroes?.refresh()
+            isRefreshing = false
+        }
     ) {
-        Icon(
+        Column(
             modifier = Modifier
-                .size(NETWORK_ERROR_ICON_HEIGHT)
-                .alpha(alpha = alphaAnim),
-            painter = painterResource(id = icon),
-            contentDescription = stringResource(R.string.network_error_icon),
-            tint = emptyScreenForegroundColor
-        )
-        Text(
-            modifier = Modifier
-                .padding(all = SMALL_PADDING)
-                .alpha(alpha = alphaAnim),
-            text = message,
-            color = emptyScreenForegroundColor,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize
-        )
+                .fillMaxSize()
+                .background(color = screenBackgroundColor)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(NETWORK_ERROR_ICON_HEIGHT)
+                    .alpha(alpha = alphaAnim),
+                painter = painterResource(id = icon),
+                contentDescription = stringResource(R.string.network_error_icon),
+                tint = emptyScreenForegroundColor
+            )
+            Text(
+                modifier = Modifier
+                    .padding(all = SMALL_PADDING)
+                    .alpha(alpha = alphaAnim),
+                text = message,
+                color = emptyScreenForegroundColor,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Medium,
+                fontSize = MaterialTheme.typography.subtitle1.fontSize
+            )
+        }
     }
 }
 
 fun parseErrorMessage(error: LoadState.Error): String {
     return when (error.error) {
-        is SocketTimeoutException -> "Server Unavailable."
+        is SocketTimeoutException, is UnknownHostException -> "Server Unavailable."
         is ConnectException -> "Internet Unavailable."
         else -> "Unknown Error."
     }
