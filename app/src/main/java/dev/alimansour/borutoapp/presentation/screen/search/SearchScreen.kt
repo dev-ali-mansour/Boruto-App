@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import dev.alimansour.borutoapp.presentation.common.ListContent
 
 @Composable
 fun SearchScreen(
@@ -30,7 +31,7 @@ fun SearchScreen(
             })
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-
+            ListContent(heroes = heroes, navController = navController)
         }
     }
 }
