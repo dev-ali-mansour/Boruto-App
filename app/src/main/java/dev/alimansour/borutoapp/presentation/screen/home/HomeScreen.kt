@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import dev.alimansour.borutoapp.navigation.Screen
 import dev.alimansour.borutoapp.presentation.common.ListContent
 
 @Composable
@@ -19,9 +20,10 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeTopBar {
-
-            }
+            HomeTopBar(
+                onSearchClicked = {
+                    navController.navigate(Screen.Search.route)
+                })
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {

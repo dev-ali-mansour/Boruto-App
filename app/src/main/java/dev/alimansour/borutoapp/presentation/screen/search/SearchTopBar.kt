@@ -29,7 +29,12 @@ fun SearchTopBar(
     onSearchClicked: (String) -> Unit,
     onCloseClicked: () -> Unit
 ) {
-
+    SearchWidget(
+        text = text,
+        onTextChanged = onTextChanged,
+        onSearchClicked = onSearchClicked,
+        onCloseClicked = onCloseClicked
+    )
 }
 
 @Composable
