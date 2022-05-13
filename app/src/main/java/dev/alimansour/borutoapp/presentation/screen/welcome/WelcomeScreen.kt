@@ -45,7 +45,7 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(welcomeScreenBackgroundColor)
+            .background(screenBackgroundColor)
     ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),

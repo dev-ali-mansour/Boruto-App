@@ -18,7 +18,7 @@ val ShimmerLightGray = Color(0xFFF1F1F1)
 val ShimmerMediumGray = Color(0xFFE3E3E3)
 val ShimmerDarkGray = Color(0xFF1D1D1D)
 
-val welcomeScreenBackgroundColor: Color
+val screenBackgroundColor: Color
     @Composable
     get() = if (isSystemInDarkTheme()) Color.Black else Color.White
 
@@ -58,3 +58,7 @@ val shimmerItemBackgroundColor: Color
 val shimmerItemForegroundColor: Color
     @Composable
     get() = if (isSystemInDarkTheme()) ShimmerDarkGray else ShimmerMediumGray
+
+val emptyScreenForegroundColor: Color
+    @Composable
+    get() = if (isSystemInDarkTheme()) LightGray else DarkGray
