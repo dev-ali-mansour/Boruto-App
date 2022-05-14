@@ -14,4 +14,5 @@ object Constants {
 
     const val BASE_URL = "https://boruto-ktor-server.herokuapp.com/"
     const val ITEMS_PER_PAGE = 3
+    const val ABOUT_TEXT_MAX_LINES = 7
 }
