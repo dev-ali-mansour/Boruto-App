@@ -53,14 +53,10 @@ fun SplashScreen(
 
 @Composable
 fun Splash(degrees: Float) {
-    val modifier = if (isSystemInDarkTheme()) Modifier
-        .background(Color.Black)
-        .fillMaxSize()
-    else Modifier
-        .background(Brush.verticalGradient(listOf(Purple700, Purple500)))
-        .fillMaxSize()
+    val modifier = if (isSystemInDarkTheme()) Modifier.background(Color.Black)
+    else Modifier.background(Brush.verticalGradient(listOf(Purple700, Purple500)))
     Box(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Image(

@@ -1,7 +1,6 @@
 package dev.alimansour.borutoapp.presentation.common
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +25,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.Hero
 import dev.alimansour.borutoapp.navigation.Screen
@@ -92,12 +92,6 @@ fun HeroItem(
     hero: Hero,
     navController: NavHostController
 ) {
-    val painter = rememberAsyncImagePainter(
-        model = "$BASE_URL${hero.image}",
-        placeholder = painterResource(id = R.drawable.ic_placeholder),
-        error = painterResource(id = R.drawable.ic_placeholder)
-    )
-
     Box(
         modifier = Modifier
             .height(HERO_ITEM_HEIGHT)
@@ -107,9 +101,13 @@ fun HeroItem(
         contentAlignment = Alignment.BottomStart
     ) {
         Surface(shape = Shapes.large) {
-            Image(
+            AsyncImage(
                 modifier = Modifier.fillMaxSize(),
-                painter = painter,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("$BASE_URL${hero.image}")
+                    .placeholder(drawableResId = R.drawable.ic_placeholder)
+                    .error(drawableResId = R.drawable.ic_placeholder)
+                    .build(),
                 contentDescription = stringResource(R.string.hero_image),
                 contentScale = ContentScale.Crop
             )

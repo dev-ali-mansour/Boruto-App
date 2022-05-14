@@ -2,7 +2,6 @@ package dev.alimansour.borutoapp.presentation.screen.details
 
 import android.graphics.Color.parseColor
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.Hero
@@ -54,9 +55,11 @@ fun DetailsContent(
     }
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = Color(parseColor(darkVibrant))
-    )
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = Color(parseColor(darkVibrant))
+        )
+    }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = Expanded)
@@ -208,22 +211,20 @@ fun BackgroundContent(
     backgroundColor: Color = MaterialTheme.colors.surface,
     onCloseClicked: () -> Unit
 ) {
-    val painter = rememberAsyncImagePainter(
-        model = "$BASE_URL$heroImage",
-        placeholder = painterResource(id = R.drawable.ic_placeholder),
-        error = painterResource(id = R.drawable.ic_placeholder)
-    )
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(fraction = imageFraction + MIN_BACKGROUND_IMAGE_HEIGHT)
                 .align(Alignment.TopStart),
-            painter = painter,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data("$BASE_URL$heroImage")
+                .error(drawableResId = R.drawable.ic_placeholder)
+                .build(),
             contentDescription = stringResource(R.string.hero_image),
             contentScale = ContentScale.Crop
         )

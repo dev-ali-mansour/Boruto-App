@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -20,11 +21,14 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val allHeroes = homeViewModel.getAllHeroes.collectAsLazyPagingItems()
-
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = MaterialTheme.colors.statusBarColor
-    )
+    val systemBarColor = MaterialTheme.colors.statusBarColor
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = systemBarColor
+        )
+    }
 
     Scaffold(
         topBar = {
