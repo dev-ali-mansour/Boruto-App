@@ -16,4 +16,7 @@ object Constants {
     const val ITEMS_PER_PAGE = 3
     const val ABOUT_TEXT_MAX_LINES = 7
     const val MIN_BACKGROUND_IMAGE_HEIGHT = 0.4F
+    const val VIBRANT = "vibrant"
+    const val DARK_VIBRANT = "darkVibrant"
+    const val ON_DARK_VIBRANT = "onDarkVibrant"
 }

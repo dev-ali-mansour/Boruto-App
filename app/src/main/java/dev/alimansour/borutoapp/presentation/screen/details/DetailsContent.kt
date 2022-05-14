@@ -1,6 +1,6 @@
 package dev.alimansour.borutoapp.presentation.screen.details
 
-import android.util.Log
+import android.graphics.Color.parseColor
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,8 +11,7 @@ import androidx.compose.material.BottomSheetValue.Collapsed
 import androidx.compose.material.BottomSheetValue.Expanded
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.alimansour.borutoapp.R
 import dev.alimansour.borutoapp.domain.model.Hero
 import dev.alimansour.borutoapp.presentation.component.InfoBox
@@ -31,14 +31,33 @@ import dev.alimansour.borutoapp.presentation.component.OrderedList
 import dev.alimansour.borutoapp.presentation.theme.*
 import dev.alimansour.borutoapp.util.Constants.ABOUT_TEXT_MAX_LINES
 import dev.alimansour.borutoapp.util.Constants.BASE_URL
+import dev.alimansour.borutoapp.util.Constants.DARK_VIBRANT
 import dev.alimansour.borutoapp.util.Constants.MIN_BACKGROUND_IMAGE_HEIGHT
+import dev.alimansour.borutoapp.util.Constants.ON_DARK_VIBRANT
+import dev.alimansour.borutoapp.util.Constants.VIBRANT
 
 @ExperimentalMaterialApi
 @Composable
 fun DetailsContent(
     navController: NavHostController,
-    selectedHero: Hero?
+    selectedHero: Hero?,
+    colors: Map<String, String>
 ) {
+    var vibrant by remember { mutableStateOf("#000000") }
+    var darkVibrant by remember { mutableStateOf("#000000") }
+    var onDarkVibrant by remember { mutableStateOf("#FFFFFF") }
+
+    LaunchedEffect(key1 = selectedHero) {
+        vibrant = colors[VIBRANT]!!
+        darkVibrant = colors[DARK_VIBRANT]!!
+        onDarkVibrant = colors[ON_DARK_VIBRANT]!!
+    }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        color = Color(parseColor(darkVibrant))
+    )
+
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = Expanded)
     )
@@ -60,14 +79,20 @@ fun DetailsContent(
         sheetPeekHeight = MIN_SHEET_HEIGHT,
         sheetContent = {
             selectedHero?.let { hero ->
-                BottomSheetContent(selectedHero = hero)
+                BottomSheetContent(
+                    selectedHero = hero,
+                    infoBoxIconColor = Color(parseColor(vibrant)),
+                    sheetBackgroundColor = Color(parseColor(darkVibrant)),
+                    contentColor = Color(parseColor(onDarkVibrant))
+                )
             }
         }
     ) {
         selectedHero?.let { hero ->
             BackgroundContent(
                 heroImage = hero.image,
-                imageFraction = currentSheetFraction
+                imageFraction = currentSheetFraction,
+                backgroundColor = Color(parseColor(darkVibrant))
             ) {
                 navController.popBackStack()
             }
@@ -98,7 +123,8 @@ fun BottomSheetContent(
                     .size(INFO_ICON_SIZE)
                     .weight(2f),
                 painter = painterResource(id = R.drawable.ic_logo),
-                contentDescription = stringResource(id = R.string.app_logo)
+                contentDescription = stringResource(id = R.string.app_logo),
+                tint = contentColor
             )
             Text(
                 modifier = Modifier.weight(8f),
@@ -189,7 +215,7 @@ fun BackgroundContent(
     )
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(backgroundColor)
     ) {
         Image(

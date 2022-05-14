@@ -11,8 +11,7 @@ import dev.alimansour.borutoapp.domain.model.Hero
 import dev.alimansour.borutoapp.domain.usecase.get_selected_hero.GetSelectedHeroUseCase
 import dev.alimansour.borutoapp.util.Constants.DETAILS_ARGUMENT_KEY
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,10 +24,30 @@ class DetailsViewModel @Inject constructor(
     private val _selectedHero: MutableStateFlow<Hero?> = MutableStateFlow(null)
     val selectedHero: StateFlow<Hero?> = _selectedHero
 
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent: SharedFlow<UiEvent> = _uiEvent
+
+    private val _colorPalette: MutableState<Map<String, String>> = mutableStateOf(mapOf())
+    val colorPalette: State<Map<String, String>> = _colorPalette
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             val heroId = savedStateHandle.get<Int>(DETAILS_ARGUMENT_KEY)
             _selectedHero.value = heroId?.let { getSelectedHeroUseCase(heroId = it) }
         }
     }
+
+    fun generateColorPalette() {
+        viewModelScope.launch {
+            _uiEvent.emit(UiEvent.GenerateColorPalette)
+        }
+    }
+
+    fun setColorPalette(colors: Map<String, String>) {
+        _colorPalette.value = colors
+    }
+}
+
+sealed class UiEvent {
+    object GenerateColorPalette : UiEvent()
 }
