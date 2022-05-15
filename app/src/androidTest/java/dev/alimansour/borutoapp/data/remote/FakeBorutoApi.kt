@@ -2,13 +2,14 @@ package dev.alimansour.borutoapp.data.remote
 
 import dev.alimansour.borutoapp.data.local.entity.HeroEntity
 import dev.alimansour.borutoapp.data.remote.response.ApiResponse
+import java.io.IOException
 
 const val NEXT_PAGE_KEY = "nextPage"
 const val PREVIOUS_PAGE_KEY = "prevPage"
 
 class FakeBorutoApi : BorutoApi {
 
-    private val heroes = listOf(
+    private val heroes = mutableListOf(
         HeroEntity(
             id = 1,
             name = "Sasuke",
@@ -379,9 +380,11 @@ class FakeBorutoApi : BorutoApi {
             )
         )
     )
+    private var exception = false
 
-    override suspend fun getAllHeroes(page: Int, limit: Int): ApiResponse =
-        ApiResponse(
+    override suspend fun getAllHeroes(page: Int, limit: Int): ApiResponse {
+        if (exception) throw IOException()
+        return ApiResponse(
             success = true,
             message = "Ok",
             prevPage = calculatePage(
@@ -400,9 +403,18 @@ class FakeBorutoApi : BorutoApi {
                 limit = limit
             )
         )
+    }
 
     override suspend fun searchHeroes(name: String): ApiResponse =
         ApiResponse(success = false)
+
+    fun clearData() {
+        heroes.clear()
+    }
+
+    fun throwException() {
+        exception = true
+    }
 
     private fun calculatePage(
         heroes: List<HeroEntity>,
@@ -414,7 +426,8 @@ class FakeBorutoApi : BorutoApi {
             step = limit,
             partialWindows = true
         )
-        require(page <= allHeroes.size)
+        if (page > allHeroes.size)
+            return mapOf(PREVIOUS_PAGE_KEY to null, NEXT_PAGE_KEY to null)
         val prevPage = if (page == 1) null else page - 1
         val nextPage = if (page == allHeroes.size) null else page + 1
         return mapOf(PREVIOUS_PAGE_KEY to prevPage, NEXT_PAGE_KEY to nextPage)
@@ -430,7 +443,7 @@ class FakeBorutoApi : BorutoApi {
             step = limit,
             partialWindows = true
         )
-        require(page > 0 && page <= allHeroes.size)
-        return allHeroes[page - 1]
+        return if (page > allHeroes.size) listOf()
+        else allHeroes[page - 1]
     }
 }

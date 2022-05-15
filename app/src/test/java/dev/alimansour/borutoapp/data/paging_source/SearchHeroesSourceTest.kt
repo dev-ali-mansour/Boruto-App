@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 
 
 @ExperimentalCoroutinesApi
-internal class SearchHeroesSourceTest {
+class SearchHeroesSourceTest {
 
     private lateinit var borutoApi: BorutoApi
     private lateinit var heroes: List<HeroEntity>
