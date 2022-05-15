@@ -62,7 +62,7 @@ class FakeBorutoApi : BorutoApi {
         return when {
             name.isNotEmpty() -> {
                 heroes.forEach { hero ->
-                    founded.add(hero)
+                    if (hero.name.lowercase().contains(name.lowercase())) founded.add(hero)
                 }
                 founded
             }

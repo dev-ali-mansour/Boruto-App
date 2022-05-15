@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import dev.alimansour.borutoapp.data.local.entity.HeroEntity
 import dev.alimansour.borutoapp.data.remote.BorutoApi
 
-class SearchHeroesResource(
+class SearchHeroesSource(
     private val borutoApi: BorutoApi,
     private val query: String
 ) : PagingSource<Int, HeroEntity>() {
